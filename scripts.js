@@ -1,92 +1,85 @@
-// Вызов несуществующей функции у объекта
-
-let myObject = {
-    key1: "value1",
-    key2: "value2"
-};
-
-// Пробуем вызвать несуществующую функцию
-console.log(myObject.countLetters("example string"));
-
-// Добавляем функцию к прототипу объекта
-Object.prototype.countLetters = function(str) {
-    if (typeof str === 'string') {
-        return str.replace(/\s+/g, '').length;
+class Good {
+    constructor(name, price, color) {
+        this.name = name;
+        this.price = price;
+        this.color = color;
+        this.width = '2px';
     }
-    return 0;
-};
 
-
-console.log(myObject.countLetters("example string"));
-
-
-// Функция возведения числа в степень
-
-Number.prototype.power = function(exp) {
-    return Math.pow(this, exp);
-};
-
-
-let number = 2;
-let exponent = 3;
-console.log(number.power(exponent)); // 8
-
-
-// Создание объекта с полями и геттерами/сеттерами
-let person = {
-    _firstName: "John",
-    _lastName: "Doe",
-    _day: new Date().getDate(),
-    _month: new Date().getMonth() + 1,
-    _year: new Date().getFullYear(),
-
-    get firstName() {
-        return this._firstName;
-    },
-    set firstName(value) {
-        this._firstName = value;
-    },
-
-    get lastName() {
-        return this._lastName;
-    },
-    set lastName(value) {
-        this._lastName = value;
-    },
-
-    get day() {
-        return this._day;
-    },
-    set day(value) {
-        this._day = value;
-    },
-
-    get month() {
-        return this._month;
-    },
-    set month(value) {
-        this._month = value;
-    },
-
-    get year() {
-        return this._year;
-    },
-    set year(value) {
-        this._year = value;
-    }
-};
-
-// Удаление имени и фамилии запретим с помощью Object.defineProperty
-Object.defineProperty(person, 'firstName', { configurable: false });
-Object.defineProperty(person, 'lastName', { configurable: false });
-
-
-person.firstName = "Jane";
-person.lastName = "Smith";
-
-// Цикл для вывода всех полей
-for (let key in person) {
-    if (person.hasOwnProperty(key) && key.startsWith('_')) {
-        console.log(`${key.substring(1)}: ${person[key]}`);
+    create() {
+        let element = document.createElement('div');
+        element.style.backgroundColor = this.color;
+        element.style.border = `${this.width} solid black`;
+        element.style.padding = '10px';
+        element.style.margin = '10px 0';
+        element.innerHTML = `Name: ${this.name}, Price: ${this.price}`;
+        document.body.appendChild(element);
     }
 }
+
+
+let good1 = new Good('Apple', '$1', 'red');
+let good2 = new Good('Banana', '$0.5', 'yellow');
+
+
+good1.create();
+good2.create();
+
+
+class User {
+    constructor() {
+        this.default_age = 14;
+    }
+
+    get age() {
+        return this.default_age;
+    }
+
+    set age(value) {
+        if (value > 0 && value < 120) {
+            this.default_age = value;
+        } else {
+            console.log('Invalid age');
+        }
+    }
+}
+
+
+let user1 = new User();
+let user2 = new User();
+
+console.log(user1.age);
+user1.age = 25;
+console.log(user1.age);
+
+console.log(user2.age);
+user2.age = 130;
+console.log(user2.age);
+
+
+class User {
+    comment() {
+        return "User comment";
+    }
+}
+
+class Moderator extends User {
+    static type = "Moderator";
+
+    constructor(age) {
+        super();
+        this.age = age;
+    }
+
+    comment() {
+        return "<b>Moderator comment</b>";
+    }
+}
+
+
+let user = new User();
+console.log(user.comment());
+
+
+let moderator = new Moderator(30);
+console.log(moderator.comment());
